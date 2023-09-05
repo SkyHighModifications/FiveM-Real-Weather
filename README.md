@@ -13,3 +13,8 @@ Fill in the variables in config.lua
 * Modified - Smurfy @ SkyHighModifications
 
 Real time was implemented into the script by SkyHigh Modifications so what ever the time is on your server is the time synced across all players! same with the weather
+
+
+## Versions
+* V1.0.0 - Initial Forked Modified Release
+* V1.1.0 - Removed few things from `config.lua`, also added more coding to `server.lua` and updated version in `fxmanifest.lua `
