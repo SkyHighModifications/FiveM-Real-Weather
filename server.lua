@@ -25,15 +25,25 @@ Citizen.CreateThread(function()
     for k, v in pairs(Config.WeatherScripts) do
         local resource = v
         local current = GetCurrentResourceName()
-        local author = "Jijamik"
-        local modified = "SkyHigh Modifications"
         StopResource(current)
         StopResource(resource)
-        print("^1Stopped this resource "..resource.. " or these resources "..resource..". ^3To prevent any conflict^7")
+        if #Config.WeatherScripts == 1 then
+        print("^1Stopped this resource "..resource..". ^3To prevent any conflict^7")
         StartResource(current)
-        print("^2Restarted ^4"..current.. "^2 ENJOY^7")
-        print("^6Created by "..author.." and Modified by "..modified.."^7")
+        elseif #Config.WeatherScripts > 1 then
+        print("^1Stopped these resources "..resource..". ^3To prevent any conflict^7")
+        StartResource(current)
+    end
    end
+end)
+
+Citizen.CreateThread(function()
+    local current = GetCurrentResourceName()
+    local author = "Jijamik"
+    local modified = "SkyHigh Modifications"
+    print("^2Restarted ^4"..current.. "^2 ENJOY^7")
+    print("^6Created by "..author.." and Modified by "..modified.."^7")
+    StartResource(current)
 end)
 
 
@@ -47,7 +57,7 @@ function sendToDiscordForecast(type, color, name, message)
               ["type"] = type,
               ["description"] = message,
               ["footer"] = {
-                ["text"] = "Created By Jijamik & SkyHigh Modifications ",
+                ["text"] = "Created By Jijamik & SkyHigh Modifications "..os.time().." ",
                 ["icon_url"] = Config.FooterImage,
             },
           }
