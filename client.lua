@@ -1,13 +1,14 @@
 --Made by Jijamik, feel free to modify
+--Modified by Smurfy @ SkyHigh Modifications 05/09/23
 
-RegisterNetEvent('meteo:actu')
-AddEventHandler('meteo:actu', function(data)
+RegisterNetEvent('forecast:actu')
+AddEventHandler('forecast:actu', function(Data)
 	ClearWeatherTypePersist()
-	SetWeatherTypeOverTime(data["Meteo"], 80.00)
+	SetWeatherTypeOverTime(Data["forecast"], 80.00)
 	SetWind(1.0)
-	SetWindSpeed(data["VitesseVent"]);
-	SetWindDirection(data["DirVent"])
-    if data["Meteo"] == "XMAS" then
+	SetWindSpeed(Data["VitesseVent"]);
+	SetWindDirection(Data["DirVent"])
+    if Data["forecast"] == "XMAS" then
         SetForceVehicleTrails(true)
         SetForcePedFootstepsTracks(true)
     else
@@ -17,7 +18,16 @@ AddEventHandler('meteo:actu', function(data)
 end)
 
 AddEventHandler('onClientMapStart', function()
-	TriggerServerEvent('meteo:sync')
+	TriggerServerEvent('forecast:sync')
+    TriggerServerEvent("SHM:RealTime")
 end)
 
-TriggerServerEvent('meteo:sync')
+TriggerServerEvent('forecast:sync')
+
+SetMillisecondsPerGameMinute(60000)
+
+RegisterNetEvent("SHM:RealTime")
+AddEventHandler("SHM:RealTime", function(source, h, m, s)
+	NetworkOverrideClockTime(h, m, s)
+end)
+TriggerServerEvent("SHM:RealTime")
