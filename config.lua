@@ -8,7 +8,6 @@ Config = {
     AvatarUrl = "https://upload.wikimedia.org/wikipedia/en/thumb/f/f4/Met_Office.svg/1024px-Met_Office.svg.png",
     BotUserName = "Met Office",
     FooterImage = "https://upload.wikimedia.org/wikipedia/en/thumb/f/f4/Met_Office.svg/1024px-Met_Office.svg.png",
-    ThumbnailImage = "",
 
     RealTime = true, -- Use IRL PC time in server
     WeatherScripts = {
