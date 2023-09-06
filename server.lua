@@ -152,7 +152,7 @@ end)
 ]]
 
 Citizen.CreateThread(function()
-local currentVersion = '1.0.0' -- Your current script version
+local currentVersion = '1.1.0' -- Your current script version
 PerformHttpRequest('https://github.com/SkyHighModifications/FiveM-Real-Weather-Real-Time/blob/master/version.txt', function(errorCode, resultData, headers)
     if errorCode == 200 then
         local latestVersion = resultData:gsub('%s+', '') -- Remove any whitespace or newlines
