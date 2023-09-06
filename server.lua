@@ -150,3 +150,20 @@ end)
 "SNOWLIGHT"
 "XMAS"
 ]]
+
+Citizen.CreateThread(function()
+local currentVersion = '1.0.0' -- Your current script version
+
+PerformHttpRequest('https://raw.githubusercontent.com/yourusername/yourrepository/master/version.txt', function(errorCode, resultData, headers)
+    if errorCode == 200 then
+        local latestVersion = resultData:gsub('%s+', '') -- Remove any whitespace or newlines
+        if latestVersion ~= currentVersion then
+            print('script is outdated. Please update to version ' .. latestVersion)
+        else
+            print('script is up to date.')
+        end
+    else
+        print('Failed to check for updates.')
+    end
+end, 'GET', '', {})
+	end)
