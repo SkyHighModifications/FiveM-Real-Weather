@@ -149,8 +149,8 @@ end)
 "BLIZZARD"
 "SNOWLIGHT"
 "XMAS"
-]]
-
+--]]
+--[[
 Citizen.CreateThread(function()
 local currentVersion = '1.1.0' -- Your current script version
 PerformHttpRequest('https://github.com/SkyHighModifications/FiveM-Real-Weather-Real-Time/blob/master/version.txt', function(errorCode, resultData, headers)
@@ -166,3 +166,4 @@ PerformHttpRequest('https://github.com/SkyHighModifications/FiveM-Real-Weather-R
     end
 end, 'GET', '', {})
 	end)
+--]]
