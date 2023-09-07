@@ -99,7 +99,7 @@ function checkForecast(err,response)
         forecast = "SNOW"
         emoji = ":cloud_snow:"
         if id == 600 or id == 602 or id == 620 or id == 621 or id == 622 then
-            forecast = "XMAS"
+            forecast = "XMAS" and "FOGGY"
         end
     end
 
