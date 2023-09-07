@@ -1,7 +1,5 @@
 --Made by Jijamik, feel free to modify
 --Modified by Smurfy @ SkyHigh Modifications 05/09/23
-local GetWeather = "http://api.openweathermap.org/data/2.5/weather?id="..Config.CityID.."&lang=fr&units=metric&APPID="..Config.ApiKey
-
 RegisterNetEvent("SHM:RealTime")
 AddEventHandler("SHM:RealTime", function()
     if Config.RealTime == true then
@@ -23,27 +21,15 @@ end
 
 Citizen.CreateThread(function()
     for k, v in pairs(Config.WeatherScripts) do
-        local resource = v
-        local current = GetCurrentResourceName()
-        StopResource(current)
-        StopResource(resource)
-        if #Config.WeatherScripts == 1 then
-        print("^1Stopped this resource "..resource..". ^3To prevent any conflict^7")
-        StartResource(current)
-        elseif #Config.WeatherScripts > 1 then
-        print("^1Stopped these resources "..resource..". ^3To prevent any conflict^7")
-        StartResource(current)
+        StopResource(v)
+        if #Config.WeatherScripts == 1 then print("^1Stopped this resource "..v..". ^3To prevent any conflict^7")
+        elseif #Config.WeatherScripts > 1 then print("^1Stopped these resources "..v..". ^3To prevent any conflict^7")
     end
+    Wait(300)
+    print("^2Restarted ^4"..GetCurrentResourceName().. "^2 Enjoy^7")
+    print("^6Created By Jijamik & SkyHigh Modifications^7")
+    StartResource(GetCurrentResourceName())
    end
-end)
-
-Citizen.CreateThread(function()
-    local current = GetCurrentResourceName()
-    local author = "Jijamik"
-    local modified = "SkyHigh Modifications"
-    print("^2Restarted ^4"..current.. "^2 ENJOY^7")
-    print("^6Created by "..author.." and Modified by "..modified.."^7")
-    StartResource(current)
 end)
 
 
@@ -62,7 +48,7 @@ function sendToDiscordForecast(type, color, name, message)
             },
           }
       }
-      if message == nil or message == '' then return FALSE end
+      if message == nil or message == '' then return false end
     PerformHttpRequest(Config.DiscordWebHook, function(err, text, headers) end, 'POST', json.encode({username = Config.BotUserName, embeds = botreply, avatar_url = Config.AvatarUrl}), { ['Content-Type'] = 'application/json' })
 end
 
@@ -73,12 +59,16 @@ function checkForecast(err,response)
     local description = data.weather[1].description
     local wind = math.floor(data.wind.speed)
     local windrot = data.wind.deg
-    local meteo = "EXTRASUNNY"
+    local forecast = "EXTRASUNNY"
     local ville = data.name
     local temp = math.floor(data.main.temp)
     local tempmini = math.floor(data.main.temp_min)
     local tempmaxi = math.floor(data.main.temp_max)
     local emoji = ":white_sun_small_cloud:"
+    if type == "Fog" or id == 741 then
+        forecast = "FOGGY"
+        emoji = ":cloud_fog:"
+    end
     if type == "Thunderstorm" then
         forecast = "THUNDER"
         emoji = ":cloud_lightning:"
@@ -102,7 +92,7 @@ function checkForecast(err,response)
         forecast = "CLOUDS"
         emoji = ":clouds:"
         if id == 804 then
-            meteo = "OVERCAST"
+            forecast = "OVERCAST"
         end
     end
     if type == "Snow" then
@@ -124,7 +114,7 @@ function checkForecast(err,response)
 end
 
 function checkForecastHTTPRequest()
-    PerformHttpRequest(GetWeather, checkForecast, "GET")
+    PerformHttpRequest("http://api.openweathermap.org/data/2.5/weather?id="..Config.CityID.."&lang=fr&units=metric&APPID="..Config.ApiKey.."", checkForecast, "GET")
 end
 
 checkForecastHTTPRequest()
