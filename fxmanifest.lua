@@ -1,6 +1,6 @@
 fx_version "cerulean"
 game "gta5"
-version "1.1.0"
+version "1.2.0"
 description "FiveM Real Weather & Real Time"
 author "Jijamik"
 name "Smurfy @ SkyHigh Modifications"
