@@ -1,5 +1,8 @@
 --Made by Jijamik, feel free to modify
 --Modified by Smurfy @ SkyHigh Modifications 05/09/23
+
+local GetWeather = "http://api.openweathermap.org/data/2.5/weather?id="..Config.CityID.."&lang=fr&units=metric&APPID="..Config.ApiKey..""
+
 RegisterNetEvent("SHM:RealTime")
 AddEventHandler("SHM:RealTime", function()
     if Config.RealTime == true then
@@ -33,17 +36,16 @@ Citizen.CreateThread(function()
 end)
 
 
-function sendToDiscordForecast(type, color, name, message)
-      
 
+function sendToDiscordForecast(color, type, name, message)
+      
     local botreply = {
           {
-              ["color"] = 008000,
-              ["title"] = "**".. GetCurrentResourceName() .."**",
-              ["type"] = type,
+              ["color"] = Config.DiscordEmbedColor,
+              ["title"] = "***".. Config.BotUserName .. "***",
               ["description"] = message,
               ["footer"] = {
-                ["text"] = "Created By Jijamik & SkyHigh Modifications "..os.time().." ",
+                ["text"] = "Created By Jijamik & SkyHigh Modifications",
                 ["icon_url"] = Config.FooterImage,
             },
           }
@@ -52,54 +54,59 @@ function sendToDiscordForecast(type, color, name, message)
     PerformHttpRequest(Config.DiscordWebHook, function(err, text, headers) end, 'POST', json.encode({username = Config.BotUserName, embeds = botreply, avatar_url = Config.AvatarUrl}), { ['Content-Type'] = 'application/json' })
 end
 
+
 function checkForecast(err,response)
+    Citizen.Wait(Config.UpdateTimeLog)
+    time = GetTime()
     local data = json.decode(response)
     local type = data.weather[1].main
     local id = data.weather[1].id
-    local description = data.weather[1].description
     local wind = math.floor(data.wind.speed)
     local windrot = data.wind.deg
     local forecast = "EXTRASUNNY"
-    local ville = data.name
+    local location = data.name
+    local humid = math.floor(data.main.humidity)
+    local feelslike = math.floor(data.main.feels_like)
     local temp = math.floor(data.main.temp)
     local tempmini = math.floor(data.main.temp_min)
     local tempmaxi = math.floor(data.main.temp_max)
-    local emoji = ":white_sun_small_cloud:"
+    local emoji = "⛅"
     if type == "Fog" or id == 741 then
         forecast = "FOGGY"
-        emoji = ":cloud_fog:"
+        emoji = "🌫️"
     end
     if type == "Thunderstorm" then
         forecast = "THUNDER"
-        emoji = ":cloud_lightning:"
+        emoji = "⛈️"
     end
     if type == "Rain" then
         forecast = "RAIN"
-        emoji = ":cloud_snow:"
+        emoji = "🌧️"
     end
     if type == "Drizzle" then
         forecast = "CLEARING"
-        emoji = ":clouds:"
+        emoji = "☁️"
         if id == 608 then
             forecast = "OVERCAST"
         end
     end
     if type == "Clear" then
         forecast = "CLEAR"
-        emoji = ":sun_with_face:"
+        emoji = "🌞"
     end
     if type == "Clouds" then
         forecast = "CLOUDS"
-        emoji = ":clouds:"
+        emoji = "☁️"
         if id == 804 then
             forecast = "OVERCAST"
         end
     end
     if type == "Snow" then
         forecast = "SNOW"
-        emoji = ":cloud_snow:"
+        emoji = "☃️"
         if id == 600 or id == 602 or id == 620 or id == 621 or id == 622 then
             forecast = "XMAS" and "FOGGY"
+            return
         end
     end
 
@@ -109,12 +116,12 @@ function checkForecast(err,response)
         ["DirVent"] = windrot
     }
     TriggerClientEvent("forecast:actu", -1, Data)
-    sendToDiscordForecast(1,('Weather'), emoji.." The weather is "..ville.." est "..description..". \n:thermometer: Tempeture is currently "..temp.."°C minimum tempeture of "..tempmini.."°C maximum tempeture of "..tempmaxi.."°C. \n:wind_blowing_face: Winds of "..wind.."m/s are to be expected.",16711680)
+    sendToDiscordForecast(0, type,('Weather'), emoji.." The weather in ***"..location.." , "..Config.Country.."***. \n:thermometer: Currently **"..temp.."°C** / min temperature of **"..tempmini.."°C** / max temperature of **"..tempmaxi.."°C**. \n:raised_hand: Feels like **"..feelslike.."°C**. \n:hot_face: Humidity **"..humid.." %.** \n:wind_blowing_face: Winds of **"..wind.." m/s** are to be expected.")
     SetTimeout(60*60*1000, checkForecastHTTPRequest)
 end
 
 function checkForecastHTTPRequest()
-    PerformHttpRequest("http://api.openweathermap.org/data/2.5/weather?id="..Config.CityID.."&lang=fr&units=metric&APPID="..Config.ApiKey.."", checkForecast, "GET")
+    PerformHttpRequest(GetWeather, checkForecast, "GET")
 end
 
 checkForecastHTTPRequest()
