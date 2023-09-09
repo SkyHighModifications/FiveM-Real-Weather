@@ -1,7 +1,7 @@
 --Made by Jijamik, feel free to modify
 --Modified by Smurfy @ SkyHigh Modifications 05/09/23
 
-local GetWeather = "http://api.openweathermap.org/data/2.5/weather?id="..Config.CityID.."&lang=fr&units=metric&APPID="..Config.ApiKey..""
+local GetWeather = "http://api.openweathermap.org/data/2.5/weather?id="..Config.CityID.."&lang=en&units=metric&APPID="..Config.ApiKey..""
 
 RegisterNetEvent("SHM:RealTime")
 AddEventHandler("SHM:RealTime", function()
@@ -25,11 +25,11 @@ end
 Citizen.CreateThread(function()
     for k, v in pairs(Config.WeatherScripts) do
         StopResource(v)
-        if #Config.WeatherScripts == 1 then print("^1Stopped this resource "..v..". ^3To prevent any conflict^7")
-        elseif #Config.WeatherScripts > 1 then print("^1Stopped these resources "..v..". ^3To prevent any conflict^7")
+        if #Config.WeatherScripts == 1 then print("^1Stopped this resource ^5("..v..") ^3to prevent any conflict.^7")
+        elseif #Config.WeatherScripts > 1 then print("^1Stopped these resources ^5("..v..") ^3to prevent any conflict.^7")
     end
     Wait(300)
-    print("^2Restarted ^4"..GetCurrentResourceName().. "^2 Enjoy^7")
+    print("^2Restarted ^4" ..GetCurrentResourceName().. "^2 Enjoy^7")
     print("^6Created By Jijamik & SkyHigh Modifications^7")
     StartResource(GetCurrentResourceName())
    end
@@ -41,7 +41,7 @@ function sendToDiscordForecast(color, type, name, message)
       
     local botreply = {
           {
-              ["color"] = Config.DiscordEmbedColor,
+              ["color"] = Config.DiscordEmbedColour,
               ["title"] = "***".. Config.BotUserName .. "***",
               ["description"] = message,
               ["footer"] = {
@@ -56,8 +56,8 @@ end
 
 
 function checkForecast(err,response)
-    Citizen.Wait(Config.UpdateTimeLog)
-    time = GetTime()
+    while true do
+        Citizen.Wait(3600000)
     local data = json.decode(response)
     local type = data.weather[1].main
     local id = data.weather[1].id
@@ -106,18 +106,19 @@ function checkForecast(err,response)
         emoji = "☃️"
         if id == 600 or id == 602 or id == 620 or id == 621 or id == 622 then
             forecast = "XMAS" and "FOGGY"
-            return
         end
     end
-
     Data = {
         ["forecast"] = forecast,
         ["VitesseVent"] = wind,
         ["DirVent"] = windrot
     }
     TriggerClientEvent("forecast:actu", -1, Data)
+    if Config.DiscordLog then
     sendToDiscordForecast(0, type,('Weather'), emoji.." The weather in ***"..location.." , "..Config.Country.."***. \n:thermometer: Currently **"..temp.."°C** / min temperature of **"..tempmini.."°C** / max temperature of **"..tempmaxi.."°C**. \n:raised_hand: Feels like **"..feelslike.."°C**. \n:hot_face: Humidity **"..humid.." %.** \n:wind_blowing_face: Winds of **"..wind.." m/s** are to be expected.")
+    end
     SetTimeout(60*60*1000, checkForecastHTTPRequest)
+   end
 end
 
 function checkForecastHTTPRequest()
@@ -128,7 +129,7 @@ checkForecastHTTPRequest()
 
 RegisterServerEvent("forecast:sync")
 AddEventHandler("forecast:sync",function()
-    TriggerClientEvent("forecast:actu", source, Data)
+    TriggerClientEvent("forecast:actu", -1, Data)
 end)
 
 --[[
