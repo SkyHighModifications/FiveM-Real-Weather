@@ -18,3 +18,5 @@ Real time was implemented into the script by SkyHigh Modifications so what ever 
 ## Versions
 * V1.0.0 - Initial Forked Modified Release
 * V1.1.0 - Removed few things from `config.lua`, also added more coding to `server.lua` and updated version in `fxmanifest.lua `
+* V1.1.1 - Fixed discord bot!
+* V1.2.1 - Changed some coding and made the bot send to discord every hour rather than every 15mins! 
