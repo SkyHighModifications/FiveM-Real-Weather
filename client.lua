@@ -43,3 +43,9 @@ AddEventHandler("SHM:RealTime", function(src, h, m, s)
 	NetworkOverrideClockTime(h, m, s)
 end)
 TriggerServerEvent("SHM:RealTime")
+
+for k, v in pairs(Config.WeatherScripts) do
+	if GetResourceState(v) == 'started' or GetResourceState(v) == 'starting' then
+        print("[^1ERROR^7] YOU ARE USING A RESOURCE THAT WILL OVERRIDE ^1"..v.."^7, PLEASE REMOVE ^5" .. v .. "^7")
+	end
+end
