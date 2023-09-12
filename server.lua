@@ -1,5 +1,6 @@
 --Made by Jijamik, feel free to modify
 --Modified by Smurfy @ SkyHigh Modifications 05/09/23
+--Updated 12-09-23
 local GetWeather = "http://api.openweathermap.org/data/2.5/weather?id="..Config.CityID.."&lang="..Config.Lang.."&units="..Config.Units.."&exclude="..Config.UpdateData.."&APPID="..Config.ApiKey..""
 
 RegisterNetEvent("SHM:RealTime")
