@@ -1,0 +1,5 @@
+{
+	"version": "Release",
+	"commit" : "1.2.2",
+	"changelog": "\n- - Added vehicle traction loss when weather is snow or rain! Added and changed around discord bot layout! Added more things to 'config.lua'"
+}
