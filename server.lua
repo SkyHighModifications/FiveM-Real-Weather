@@ -38,7 +38,6 @@ function sendToDiscordForecast(color, type, name, message)
           }
       }
       if message == nil or message == '' then return false end
-      if err then print(err) end
       if Config.DiscordLog then
     PerformHttpRequest(Config.DiscordWebHook, function(err, text, headers) end, 'POST', json.encode({username = Config.BotUserName, embeds = botreply, avatar_url = Config.AvatarUrl}), { ['Content-Type'] = 'application/json' })
       else
@@ -47,8 +46,8 @@ function sendToDiscordForecast(color, type, name, message)
 end
 
 function checkForecast(err,response)
-    while true do
-        Citizen.Wait(3600000)
+    -- while true do
+       --  Citizen.Wait(3600000)
     local data = json.decode(response)
     local type = data.weather[1].main
     local id = data.weather[1].id
@@ -123,7 +122,7 @@ function checkForecast(err,response)
     TriggerClientEvent("forecast:actu", -1, Data)
     sendToDiscordForecast(0, type,('Weather')," The weather in ***"..location.." , "..Config.Country.."*** (is currently "..emoji.." | "..format.."). \n:thermometer: Currently **"..temp.."°C** / min temperature of **"..tempmini.."°C** / max temperature of **"..tempmaxi.."°C**. \n:raised_hand: Feels like **"..feelslike.."°C**. \n:hot_face: Humidity **"..humid.." %.**  \n:eyes: Visibility **"..visToWord.." **. \n:wind_blowing_face: Winds of **"..wind.." m/s** are to be expected.")
     SetTimeout(60*60*1000, checkForecastHTTPRequest)
-   end
+  -- end
 end
 
 function checkForecastHTTPRequest()
@@ -232,8 +231,6 @@ AddEventHandler("onResourceStart", function(resourceName)
     if resourceName ~= currentName then
         return
     end
-    local built = LoadResourceFile(currentName, "./web/dist/index.html")
-
     --Run version checker
     VERSION:RunVersionChecker()
 end)
