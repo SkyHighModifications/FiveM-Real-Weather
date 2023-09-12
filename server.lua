@@ -1,6 +1,8 @@
+VersionCheckURL = "https://api.github.com/repos/SkyHighModifications/FiveM-Real-Weather-Real-Time/releases/latest"
+
+
 --Made by Jijamik, feel free to modify
 --Modified by Smurfy @ SkyHigh Modifications 05/09/23
---Updated 12-09-23
 local GetWeather = "http://api.openweathermap.org/data/2.5/weather?id="..Config.CityID.."&lang="..Config.Lang.."&units="..Config.Units.."&exclude="..Config.UpdateData.."&APPID="..Config.ApiKey..""
 
 RegisterNetEvent("SHM:RealTime")
@@ -36,6 +38,7 @@ function sendToDiscordForecast(color, type, name, message)
           }
       }
       if message == nil or message == '' then return false end
+      if err then print(err) end
       if Config.DiscordLog then
     PerformHttpRequest(Config.DiscordWebHook, function(err, text, headers) end, 'POST', json.encode({username = Config.BotUserName, embeds = botreply, avatar_url = Config.AvatarUrl}), { ['Content-Type'] = 'application/json' })
       else
@@ -44,8 +47,8 @@ function sendToDiscordForecast(color, type, name, message)
 end
 
 function checkForecast(err,response)
-    while true do
-        Citizen.Wait(3600000)
+   -- while true do
+       -- Citizen.Wait(3600000)
     local data = json.decode(response)
     local type = data.weather[1].main
     local id = data.weather[1].id
@@ -103,7 +106,7 @@ function checkForecast(err,response)
         if id == 600 or id == 602 or id == 620 or id == 621 or id == 622 then
             forecast = "XMAS" and "FOGGY"
             format = "Snowing"
-        end
+       -- end
     end
     Data = {
         ["forecast"] = forecast,
@@ -154,14 +157,104 @@ end)
 Citizen.CreateThread(function()
     for k, v in pairs(Config.WeatherScripts) do
         StopResource(v)
-        if #Config.WeatherScripts == 1 then print("^1Stopped this resource ^5("..v..") ^3to prevent any conflict.^7")
-        elseif #Config.WeatherScripts > 1 then print("^1Stopped these resources ^5("..v..") ^3to prevent any conflict.^7")
-    end
     Wait(300)
     StopResource(GetCurrentResourceName())
     Wait(300)
-    print("^2Restarted ^4" ..GetCurrentResourceName().. "^2 Enjoy^7")
-    print("^6Created By Jijamik & SkyHigh Modifications^7")
+    print("^2Restarted ^4" ..GetCurrentResourceName().."")
+    print("^6Created By Jijamik & SkyHigh Modifications^2 Enjoy^7")
     StartResource(GetCurrentResourceName())
    end
 end)
+
+
+VERSION = {
+    Check = function(err, response, headers)
+        --Credit: OX_lib version checker by Linden
+        local currentVersion = GetResourceMetadata(GetCurrentResourceName(), "version", 0)
+        local latestVersion
+        if not currentVersion then
+            return
+        end
+
+        if err ~= 200 then
+            ErrorHandle("An error occurred while trying to get the current version!")
+            return
+        end
+        if response then
+            response = json.decode(response)
+            if not response.tag_name then
+                return
+            end
+
+            latestVersion = response.tag_name:match("%d%.%d+%.%d+")
+            currentVersion = currentVersion:match("%d%.%d+%.%d+")
+
+            if not latestVersion then
+                return
+            end
+
+            if currentVersion == latestVersion then
+                InfoHandle("You are using the latest version!", "green")
+                return
+            end
+
+            local currentVersionSplitted = { string.strsplit(".", currentVersion) }
+            local latestVersionSplitted = { string.strsplit(".", latestVersion) }
+
+            InfoHandle("Latest version: " .. latestVersion, "green")
+            InfoHandle("Your version: " .. currentVersion, "blue")
+
+            for i = 1, #currentVersionSplitted do
+                local current, latest = tonumber(currentVersionSplitted[i]), tonumber(latestVersionSplitted[i])
+                if current ~= latest then
+                    if not current or not latest then
+                        return
+                    end
+                    if current < latest then
+                        InfoHandle("You need download latest version! You are using an old version at the moment!", "red")
+                    else
+                        break
+                    end
+                end
+            end
+        end
+    end,
+
+    RunVersionChecker = function()
+        CreateThread(function()
+            PerformHttpRequest(VersionCheckURL, VERSION.Check, "GET")
+        end)
+    end,
+}
+
+AddEventHandler("onResourceStart", function(resourceName)
+    local currentName = GetCurrentResourceName()
+    if resourceName ~= currentName then
+        return
+    end
+    local built = LoadResourceFile(currentName, "./web/dist/index.html")
+
+    --Run version checker
+    VERSION:RunVersionChecker()
+end)
+
+function ErrorHandle(msg)
+    print(("[^1ERROR^7] ^3"..GetCurrentResourceName().."^7: %s"):format(msg))
+end
+
+RegisterNetEvent(""..GetCurrentResourceName()..":ErrorHandle", function(msg)
+    ErrorHandle(msg)
+end)
+
+function InfoHandle(msg, col)
+    if col == "green" then
+        col = 2
+    elseif col == "red" then
+        col = 1
+    elseif col == "blue" then
+        col = 4
+    else
+        col = 3
+    end
+    print(("[^9INFO^7] ^3"..GetCurrentResourceName().."^7: ^" .. col .. "%s^7"):format(msg))
+end
