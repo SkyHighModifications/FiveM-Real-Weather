@@ -47,8 +47,8 @@ function sendToDiscordForecast(color, type, name, message)
 end
 
 function checkForecast(err,response)
-   -- while true do
-       -- Citizen.Wait(3600000)
+    while true do
+        Citizen.Wait(3600000)
     local data = json.decode(response)
     local type = data.weather[1].main
     local id = data.weather[1].id
@@ -106,7 +106,7 @@ function checkForecast(err,response)
         if id == 600 or id == 602 or id == 620 or id == 621 or id == 622 then
             forecast = "XMAS" and "FOGGY"
             format = "Snowing"
-       -- end
+        end
     end
     Data = {
         ["forecast"] = forecast,
