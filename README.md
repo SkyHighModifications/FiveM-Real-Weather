@@ -20,4 +20,4 @@ Real time was implemented into the script by SkyHigh Modifications so what ever 
 * V1.1.0 - Removed few things from `config.lua`, also added more coding to `server.lua` and updated version in `fxmanifest.lua `
 * V1.1.1 - Fixed discord bot!
 * V1.2.1 - Changed some coding and made the bot send to discord every hour rather than every 15mins! 
-* V1.2.2 - Added vehicle traction loss when weather is snow or rain! Added and changed around discord bot layout! Added more things to `config.lua`.
+* V1.2.2 - Added vehicle traction loss when weather is snow or rain! Added and changed around discord bot layout! Added more things to `config.lua`. Version Checker Added!
