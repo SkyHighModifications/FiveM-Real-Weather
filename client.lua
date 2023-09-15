@@ -1,15 +1,14 @@
---Made by Jijamik, feel free to modify
---Modified by Smurfy @ SkyHigh Modifications 05/09/23
-local src = source
+-- Original script by Jijamik, modified by Smurfy @ SkyHigh Modifications on 05/09/23
 
 RegisterNetEvent('forecast:actu')
-AddEventHandler('forecast:actu', function(Data)
-	ClearWeatherTypePersist()
-	SetWeatherTypeOverTime(Data["forecast"], 0.01)
-	SetWind(Data["VitesseVent"]);
-	SetWindSpeed(Data["VitesseVent"])
-	SetWindDirection(Data["DirVent"])
-    if Data["forecast"] == "XMAS" then
+AddEventHandler('forecast:actu', function(data)
+    ClearWeatherTypePersist()
+    SetWeatherTypeOverTime(data["forecast"], 0.01)
+    SetWind(data["VitesseVent"])
+    SetWindSpeed(data["VitesseVent"])
+    SetWindDirection(data["DirVent"])
+
+    if data["forecast"] == "XMAS" then
         SetForceVehicleTrails(true)
         SetForcePedFootstepsTracks(true)
         SetVehicleReduceGrip(GetVehiclePedIsIn(PlayerPedId(), 0), true)
@@ -20,7 +19,8 @@ AddEventHandler('forecast:actu', function(Data)
         SetVehicleReduceTraction(GetVehiclePedIsIn(PlayerPedId(), 0), 0.0)
         SetVehicleReduceGrip(GetVehiclePedIsIn(PlayerPedId(), 0), false)
     end
-    if Data["forecast"] == "THUNDER" or "RAIN" then
+
+    if data["forecast"] == "THUNDER" or data["forecast"] == "RAIN" then
         SetVehicleReduceGrip(GetVehiclePedIsIn(PlayerPedId(), 0), true)
         SetVehicleReduceTraction(GetVehiclePedIsIn(PlayerPedId(), 0), 0.2)
     else
@@ -30,7 +30,7 @@ AddEventHandler('forecast:actu', function(Data)
 end)
 
 AddEventHandler('onClientMapStart', function()
-	TriggerServerEvent('forecast:sync')
+    TriggerServerEvent('forecast:sync')
     TriggerServerEvent("SHM:RealTime")
 end)
 
@@ -39,13 +39,14 @@ TriggerServerEvent('forecast:sync')
 SetMillisecondsPerGameMinute(60000)
 
 RegisterNetEvent("SHM:RealTime")
-AddEventHandler("SHM:RealTime", function(src, h, m, s)
-	NetworkOverrideClockTime(h, m, s)
+AddEventHandler("SHM:RealTime", function(_, h, m, s)
+    NetworkOverrideClockTime(h, m, s)
 end)
+
 TriggerServerEvent("SHM:RealTime")
 
-for k, v in pairs(Config.WeatherScripts) do
-	if GetResourceState(v) == 'started' or GetResourceState(v) == 'starting' then
-        print("[^1ERROR^7] YOU ARE USING A RESOURCE THAT WILL OVERRIDE ^1"..v.."^7, PLEASE REMOVE ^5" .. v .. "^7")
-	end
-end
+Citizen.CreateThread(function()
+    TriggerEvent('chat:addSuggestion', '/debug', GetCurrentResourceName(), {
+        { name = "Weather / Time Script", help = "Available types: restart | weatherdebug | timedebug" }
+    })
+end)
