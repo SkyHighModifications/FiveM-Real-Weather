@@ -63,7 +63,6 @@ function checkForecast(err, response)
     local milesPerHour = ms_to_mph(wind)
     local WindSpeed = Config.WindSpeed
     local formattedMPH = string.format("%.1f", ms_to_mph(wind))
-    local col
 
     if type == "Fog" or id == 741 then
         forecast = "FOGGY"
