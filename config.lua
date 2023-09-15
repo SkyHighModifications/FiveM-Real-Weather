@@ -2,8 +2,8 @@
 -- Updated 15-09-23
 Config = {
     -- Weather API Configuration
-    CityID = "2641689",  -- City ID, e.g., London | https://bulk.openweathermap.org/sample/
-    ApiKey = "c67ad773870622c3699a639632c3351f",  -- OpenWeather API Key | https://home.openweathermap.org/api_keys
+    CityID = "",  -- City ID, e.g., London | https://bulk.openweathermap.org/sample/
+    ApiKey = "",  -- OpenWeather API Key | https://home.openweathermap.org/api_keys
     Country = "GB",  -- Country Code, e.g., Great Britain
     Language = "en",  -- Language code
 
@@ -14,7 +14,7 @@ Config = {
     -- Discord Integration
     DiscordBOTUpdates = "1hr",  -- Bot's update frequency (24hr, 12hr, 6hr, 1hr, 30min, 15min, none)
     DiscordLog = true,  -- Enable Discord logs
-    DiscordWebHook = "https://discord.com/api/webhooks/1149492541171966064/KN89TTJLY8klXlgARxMP_WWOumGeDBADG4eGk3oZ243uAR6Ap9lnenzlfO2gRYnROSCx", -- Discord Webhook
+    DiscordWebHook = "", -- Discord Webhook
     AvatarUrl = "https://play-lh.googleusercontent.com/-8wkZVkXugyyke6sDPUP5xHKQMzK7Ub3ms2EK9Jr00uhf1fiMhLbqX7K9SdoxbAuhQ",
     BotUserName = "Open Weather", -- Bot Username
     FooterImage = "https://play-lh.googleusercontent.com/-8wkZVkXugyyke6sDPUP5xHKQMzK7Ub3ms2EK9Jr00uhf1fiMhLbqX7K9SdoxbAuhQ", -- Footer Image
@@ -30,7 +30,7 @@ Config = {
     
     -- Debug Settings
     Debug = false,  -- Debug mode
-    DebugAcePerms = "group.admin",  -- ACE permissions for debugging
+    -- DebugAcePerms = "group.admin",  -- ACE permissions for debugging < WIP
 
 --[[
     Lang = {
