@@ -65,4 +65,4 @@ Starting from version 1.3.0, we've removed the version checker due to conflicts.
 
 Our commitment to development remains unwavering, with exciting ideas on the horizon for future updates. Embrace the future of synchronized gaming with FiveM WeatherSync Pro!
 
-![Alt text](https://www.brandcrowd.com/maker/social/sjycl1ifvb)
+![Alt text](https://media.discordapp.net/attachments/1078233036853891132/1139571299933507644/mod.png)
