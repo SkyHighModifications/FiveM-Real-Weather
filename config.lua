@@ -32,6 +32,9 @@ Config = {
     Debug = false,  -- Debug mode
     -- DebugAcePerms = "group.admin",  -- ACE permissions for debugging < WIP
 
+        -- Update Settings
+    CheckForUpdates = true -- Check for GitHub updates! 
+
 --[[
     Lang = {
         "af", -- Afrikaans
